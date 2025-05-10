@@ -1,0 +1,36 @@
+name: 🧱 Build Backoffice Real Estate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout repositorio
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*' # Siempre usará la última versión LTS estable
+
+      - name: 📦 Instalar dependencias
+        run: npm install
+
+      - name: ⚒️ Construir proyecto
+        run: npm run build
+
+      # (Opcional) Deploy, por ejemplo a GitHub Pages, Netlify, SFTP, etc.
+      # Descomenta y adapta según tu entorno:
+      
+      # - name: 🚀 Deploy a GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./dist

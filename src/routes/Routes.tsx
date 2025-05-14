@@ -3,10 +3,11 @@ import { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import { Spin } from "antd";
+import RecoveryPage from "../pages/Recovery/Recovery";
 
 const Test = React.lazy(() => import("../pages/Test"));
 const Login = React.lazy(() => import("../pages/Login/Login"));
-const HomePage = React.lazy(() => import("../pages/Login/home/HomePage"));
+const HomePage = React.lazy(() => import("../pages/home/HomePage"));
 
 const AppRoutes: React.FC = () => {
     return (
@@ -26,6 +27,7 @@ const AppRoutes: React.FC = () => {
                 <Routes>
                     {/* Ruta pública */}
                     <Route path="/" element={<Login />} />
+                    <Route path="/recovery" element={<RecoveryPage />} />
 
                     {/* Rutas protegidas */}
                     <Route

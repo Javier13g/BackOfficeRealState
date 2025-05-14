@@ -118,7 +118,7 @@ const Login = () => {
                                     <Form.Item name="remember" valuePropName="checked" noStyle>
                                         <Checkbox>Remember me</Checkbox>
                                     </Form.Item>
-                                    <a href="">Forgot password</a>
+                                    <a href="#" onClick={() => navigate("/recovery")}>Forgot password</a>
                                 </div>
                             </Form.Item>
 

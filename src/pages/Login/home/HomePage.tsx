@@ -36,7 +36,7 @@ const HomePage = () => {
             label: 'Cerrar Sesión',
             onClick: () => {
                 if (token) {
-                    LoginService.logout(token).then((response) => {
+                    LoginService.logout(token).then((_response) => {
                         logout();
                         navigate('/');
                     }).catch((error) => {

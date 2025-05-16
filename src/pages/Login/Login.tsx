@@ -3,10 +3,10 @@ import { Button, Checkbox, Form, Input, Spin } from "antd";
 import Logo from "../../assets/Logo";
 import { useNavigate } from "react-router-dom";
 import loginWallpaper from "../../assets/loginWallpaper.webp";
-import LoginService from "../../services/login/LoginService";
 import { useAuthStore } from "../../store/useAuthStore";
 import NotificationMessage from "../../components/NotificationMessage";
 import { useState } from "react";
+import LoginService from "../../services/login/AuthService";
 
 interface LoginData {
     email: string;
@@ -118,7 +118,7 @@ const Login = () => {
                                     <Form.Item name="remember" valuePropName="checked" noStyle>
                                         <Checkbox>Remember me</Checkbox>
                                     </Form.Item>
-                                    <a href="">Forgot password</a>
+                                    <a href="#" onClick={() => navigate("/recovery")}>Forgot password</a>
                                 </div>
                             </Form.Item>
 

@@ -8,8 +8,8 @@ import {
 } from '@ant-design/icons';
 import { Button, Layout, Menu, theme, Avatar, Dropdown } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../../store/useAuthStore';
-import LoginService from "../../../services/login/LoginService.ts";
+import { useAuthStore } from '../../store/useAuthStore';
+import LoginService from '../../services/login/AuthService';
 
 const { Header, Sider, Content } = Layout;
 
@@ -130,7 +130,7 @@ const HomePage = () => {
                             {name
                                 ? name
                                     .split(' ') // Divide el nombre en palabras
-                                    .map((word) => word.charAt(0).toUpperCase()) // Toma la primera letra de cada palabra y la convierte en mayúscula
+                                    .map((word: string) => word.charAt(0).toUpperCase()) // Toma la primera letra de cada palabra y la convierte en mayúscula
                                     .join('') // Une las iniciales
                                 : 'U'}
                         </Avatar>

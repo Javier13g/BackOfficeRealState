@@ -6,12 +6,14 @@ interface NotificationMessageProps {
     type: NotificationType;
     message: string;
     description?: string;
+    duration?: number;
 }
 
-const NotificationMessage = ({ type, message, description }: NotificationMessageProps) => {
+const NotificationMessage = ({ type, message, description, duration }: NotificationMessageProps) => {
     notification[type]({
         message,
         description,
+        duration,
         placement: "topRight", // Puedes cambiar la posición (topLeft, bottomLeft, bottomRight)
     });
 };

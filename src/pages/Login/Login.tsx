@@ -3,10 +3,10 @@ import { Button, Checkbox, Form, Input, Spin } from "antd";
 import Logo from "../../assets/Logo";
 import { useNavigate } from "react-router-dom";
 import loginWallpaper from "../../assets/loginWallpaper.webp";
-import LoginService from "../../services/login/LoginService";
 import { useAuthStore } from "../../store/useAuthStore";
 import NotificationMessage from "../../components/NotificationMessage";
 import { useState } from "react";
+import LoginService from "../../services/login/AuthService";
 
 interface LoginData {
     email: string;

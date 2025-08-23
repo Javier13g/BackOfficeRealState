@@ -1,0 +1,62 @@
+import { Avatar, Card, Col, Row, Typography } from "antd";
+import { useParams } from "react-router-dom";
+import useSWR from "swr";
+import UserService from "../../../services/users/UserService";
+import ResultComponent from "../../../components/Result";
+import Breadcrumb from "../../../components/Breadcrumb";
+import type { User } from "../../../types/user";
+
+const DetailUser = () => {
+    const { userId } = useParams();
+    console.log("userId", userId);
+    const { data, error, isLoading } = useSWR<User>(
+        userId ? ["user", userId] : null,
+        () => UserService.getUserById(userId ?? "")
+    );
+
+    if (error) {
+        return <ResultComponent {...error} />;
+    }
+
+    console.log("loading", isLoading)
+
+    return (
+        <div>
+            <Breadcrumb />
+            <Card>
+                <div style={{ display: "flex", alignItems: "flex-start" }}>
+                    <Avatar size={100} src={data?.userImg} />
+                    <div style={{ marginLeft: 16, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                        <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                            {data?.name} {data?.lastName}
+                        </Typography.Title>
+                        <Typography.Title level={5} style={{ marginTop: 4 }}>
+                            {data?.role?.name}
+                        </Typography.Title>
+                    </div>
+                </div>
+                <Typography.Title level={4}>Información del Usuario</Typography.Title>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Typography.Title level={5}>Email</Typography.Title>
+                        <Typography.Paragraph>{data?.email}</Typography.Paragraph>
+                    </Col>
+                    <Col span={12}>
+                        <Typography.Title level={5}>Teléfono</Typography.Title>
+                        <Typography.Paragraph>{data?.phoneNumber}</Typography.Paragraph>
+                    </Col>
+                    <Col span={12}>
+                        <Typography.Title level={5}>Dirección</Typography.Title>
+                        <Typography.Paragraph>{data?.address}</Typography.Paragraph>
+                    </Col>
+                    <Col span={12}>
+                        <Typography.Title level={5}>Estado</Typography.Title>
+                        <Typography.Paragraph>{data?.statusUser?.statusName}</Typography.Paragraph>
+                    </Col>
+                </Row>
+            </Card>
+        </div>
+    );
+};
+
+export default DetailUser;

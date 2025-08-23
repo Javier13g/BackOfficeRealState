@@ -22,8 +22,7 @@ const HomePage = () => {
 
     const name = useAuthStore((state) => state.name);
     const image = useAuthStore((state) => state.image);
-    const logout = useAuthStore((state) => state.logout);
-    const token = useAuthStore((state) => state.token);
+    const reset = useAuthStore((state) => state.reset);
 
     const menuItems = [
         {
@@ -35,16 +34,15 @@ const HomePage = () => {
             key: 'logout',
             label: 'Cerrar Sesión',
             onClick: () => {
-                if (token) {
-                    LoginService.logout(token).then((_response) => {
-                        logout();
+                LoginService.logout()
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    .then((_response) => {
+                        reset();
                         navigate('/');
-                    }).catch((error) => {
+                    })
+                    .catch((error) => {
                         console.error('Error al cerrar sesión:', error);
                     });
-                } else {
-                    console.error('Error: Token is null or undefined.');
-                }
             },
         },
     ];
@@ -70,6 +68,18 @@ const HomePage = () => {
                         }}
                         src={image}
                     />
+                    {collapsed ? null :
+                        <span
+                            style={{
+                                color: '#fff',
+                                fontSize: '16px', // Tamaño de fuente dinámico
+                                transition: 'all 0.3s ease', // Transición suave al colapsar
+                            }}
+                        >
+                            {name}
+                        </span>
+                    }
+
                 </div>
                 <Menu
                     theme="dark"
@@ -79,13 +89,13 @@ const HomePage = () => {
                         {
                             key: '1',
                             icon: <UserOutlined />,
-                            label: 'nav 1',
-                            onClick: () => navigate('test'),
+                            label: 'Usuarios',
+                            onClick: () => navigate('usuarios'),
                         },
                         {
                             key: '2',
                             icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
+                            label: 'Mis propiedades',
                         },
                         {
                             key: '3',

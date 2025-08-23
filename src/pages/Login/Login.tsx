@@ -23,7 +23,7 @@ const Login = () => {
             .then((response) => {
 
                 // Guarda el token en Zustand
-                login(response.token, response.email, response.name, response.image);
+               login(response.email, response.name, response.image);
 
                 // Muestra una notificación de éxito
                 NotificationMessage({
@@ -118,7 +118,7 @@ const Login = () => {
                                     <Form.Item name="remember" valuePropName="checked" noStyle>
                                         <Checkbox>Remember me</Checkbox>
                                     </Form.Item>
-                                    <a href="#" onClick={() => navigate("/recovery")}>Forgot password</a>
+                                    <a href="" onClick={() => navigate("/recovery")}>Forgot password</a>
                                 </div>
                             </Form.Item>
 
@@ -126,7 +126,7 @@ const Login = () => {
                                 <Button block type="primary" htmlType="submit">
                                     Log in
                                 </Button>
-                                or <a href="">Register now!</a>
+                                or <a href="" onClick={() => navigate("/register")}>Register now!</a>
                             </Form.Item>
                         </Form>
                     </div>

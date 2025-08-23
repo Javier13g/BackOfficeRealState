@@ -4,8 +4,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import { Spin } from "antd";
 import RecoveryPage from "../pages/Recovery/Recovery";
+import Register from "../pages/register/Register";
 
-const Test = React.lazy(() => import("../pages/Test"));
+const UserPage = React.lazy(() => import("../pages/user/UserPage"));
+const UserDetail = React.lazy(() => import("../pages/user/detail/DetailUser"));
 const Login = React.lazy(() => import("../pages/Login/Login"));
 const HomePage = React.lazy(() => import("../pages/home/HomePage"));
 
@@ -28,6 +30,7 @@ const AppRoutes: React.FC = () => {
                     {/* Ruta pública */}
                     <Route path="/" element={<Login />} />
                     <Route path="/recovery" element={<RecoveryPage />} />
+                    <Route path="/register" element={<Register />} />
 
                     {/* Rutas protegidas */}
                     <Route
@@ -39,10 +42,18 @@ const AppRoutes: React.FC = () => {
                         }
                     >
                         <Route
-                            path="test"
+                            path="usuarios"
                             element={
                                 <PrivateRoute>
-                                    <Test />
+                                    <UserPage />
+                                </PrivateRoute>
+                            }
+                        />
+                        <Route
+                            path="usuarios/detalleusuario/:userId"
+                            element={
+                                <PrivateRoute>
+                                    <UserDetail />
                                 </PrivateRoute>
                             }
                         />

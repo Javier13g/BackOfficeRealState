@@ -15,7 +15,7 @@ const TableComponent = <T extends { key: string }>({ columns, data, loading }: T
             columns={columns}
             dataSource={data}
             rowKey={(record) => record.key}
-            pagination={{ pageSize: 2 }} // Personaliza aquí
+            pagination={{ pageSize: 10 }}
         />
     );
 }

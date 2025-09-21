@@ -86,6 +86,7 @@ const UserPage = () => {
                         }} />
                         <EditFilled width={16} height={16} onClick={() => {
                             console.log("Editar usuario:", user);
+                            navigate("/home/usuarios/editarusuario/" + user.key);
                         }} />
                     </div>
                 );

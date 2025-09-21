@@ -2,7 +2,12 @@ import request from "../axios";
 
 export const LoginService = {
   login: async (email: string, password: string) => {
-    return await request("auth/login", "POST", { email, password }, { withCredentials: true });
+    return await request(
+      "auth/login",
+      "POST",
+      { email, password },
+      { withCredentials: true }
+    );
   },
   logout: async () => {
     return await request("auth/logout", "POST", undefined, {
@@ -47,7 +52,15 @@ export const LoginService = {
       phoneNumber,
       password,
     });
-  }
+  },
+  isValidateToken: async () => {
+    return await request(
+      "auth/validate-token",
+      "POST",
+      undefined,
+      { withCredentials: true }
+    );
+  },
 };
 
 export default LoginService;

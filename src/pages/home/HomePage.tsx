@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -10,6 +10,7 @@ import { Button, Layout, Menu, theme, Avatar, Dropdown } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/useAuthStore';
 import LoginService from '../../services/login/AuthService';
+import { useValidateTokenEffect } from '../../hooks/useValidateTokenEffect';
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,6 +20,10 @@ const HomePage = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
+    useValidateTokenEffect();
+
+
 
     const name = useAuthStore((state) => state.name);
     const image = useAuthStore((state) => state.image);

@@ -16,6 +16,7 @@ import type { register } from "../../types/register";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
+  console.log("Loading state:", loading);
   const navigate = useNavigate();
 
   const onFinish = (values: register) => {

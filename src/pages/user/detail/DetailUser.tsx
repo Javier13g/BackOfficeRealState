@@ -11,6 +11,7 @@ const DetailUser = () => {
         userId ? ["user", userId] : null,
         () => UserService.getUserById(userId ?? "")
     );
+    console.log(isLoading);
 
     if (error) {
         return <ResultComponent {...error} />;

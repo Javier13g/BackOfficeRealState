@@ -11,6 +11,8 @@ const EditUser = () => {
     userId ? ["user", userId] : null,
     () => UserService.getUserById(userId ?? ""),
   );
+
+  console.log(isLoading);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -24,6 +26,10 @@ const EditUser = () => {
       });
     }
   }, [data, form]);
+
+  if (error) {
+    return <div>Error loading user data</div>;
+  }
   return <div>Edit User Page</div>;
 };
 

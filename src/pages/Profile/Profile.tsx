@@ -5,7 +5,6 @@ import {
     Card,
     Typography,
     Avatar,
-    Upload,
     Col,
     Row,
 } from "antd";
@@ -35,6 +34,8 @@ const Profile = () => {
         () => UserService.getUserById(idUser ?? ""),
     );
 
+    console.log(isLoading)
+
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -56,9 +57,9 @@ const Profile = () => {
         return <ResultComponent {...error} />;
     }
 
-    const handleFinish = (values: User) => {
-        // Aquí iría la lógica para actualizar el perfil
-    };
+    // const handleFinish = (values: User) => {
+    //     // Aquí iría la lógica para actualizar el perfil
+    // };
 
 
     return (
@@ -103,7 +104,10 @@ const Profile = () => {
                         <Form
                             form={form}
                             layout="vertical"
-                            onFinish={handleFinish}
+                            onFinish={(values) => {
+                                console.log("Form values:", values);
+                                // Aquí iría la lógica para actualizar el perfil
+                            }}
                             style={{ width: "100%" }}
                             initialValues={{
                                 name: data?.name ?? "",

@@ -16,7 +16,6 @@ const DetailUser = () => {
         return <ResultComponent {...error} />;
     }
 
-    console.log("loading", isLoading)
     return (
         <div>
             <Card>

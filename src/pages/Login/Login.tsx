@@ -22,8 +22,6 @@ const Login = () => {
         setLoading(true);
         LoginService.login(values.email, values.password)
             .then((response: LoginResponse) => {
-                console.log("Login successful", response);
-
                 // Guarda el token en Zustand
                login(response.email, response.name, response.image, response.id, response.role);
 

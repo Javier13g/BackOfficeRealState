@@ -13,7 +13,6 @@ const UserPage = () => {
     const navigate = useNavigate();
     const { data, error, isLoading } = useSWR(["users"], fetcher);
 
-    console.log("Error:", error);
 
     if (error) {
         return <ResultComponent {...error} />;
@@ -36,7 +35,6 @@ const UserPage = () => {
     };
 
 
-    console.log("DataSource:", dataSource);
     const columns = [
         {
             title: 'Nombre',
@@ -81,11 +79,9 @@ const UserPage = () => {
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         <EyeFilled width={16} height={16} onClick={() => {
-                            console.log("Ver usuario:", user);
                             navigate("/home/usuarios/detalleusuario/" + user.key);
                         }} />
                         <EditFilled width={16} height={16} onClick={() => {
-                            console.log("Editar usuario:", user);
                             navigate("/home/usuarios/editarusuario/" + user.key);
                         }} />
                     </div>

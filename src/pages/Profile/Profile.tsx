@@ -30,7 +30,6 @@ const { Title } = Typography;
 
 const Profile = () => {
     const idUser = useAuthStore((state) => state.idUser);
-    console.log(idUser);
     const { data, error, isLoading } = useSWR<User>(
         idUser ? ["user", idUser] : null,
         () => UserService.getUserById(idUser ?? ""),
@@ -59,10 +58,8 @@ const Profile = () => {
 
     const handleFinish = (values: User) => {
         // Aquí iría la lógica para actualizar el perfil
-        console.log("Datos actualizados:", values);
     };
 
-    console.log("data", data);
 
     return (
         <div>

@@ -19,7 +19,6 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onFinish = (values: register) => {
-    console.log("Received values of form: ", values);
     setLoading(true);
     LoginService.registerUser(
       values.email,
@@ -31,7 +30,6 @@ const Register = () => {
       values.password
     )
       .then((response) => {
-        console.log("Registration successful", response);
         NotificationMessage({
           type: "success",
           message: response.message,

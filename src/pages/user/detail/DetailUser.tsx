@@ -3,12 +3,10 @@ import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import UserService from "../../../services/users/UserService";
 import ResultComponent from "../../../components/Result";
-import Breadcrumb from "../../../components/Breadcrumb";
 import type { User } from "../../../types/user";
 
 const DetailUser = () => {
     const { userId } = useParams();
-    console.log("userId", userId);
     const { data, error, isLoading } = useSWR<User>(
         userId ? ["user", userId] : null,
         () => UserService.getUserById(userId ?? "")
@@ -19,10 +17,8 @@ const DetailUser = () => {
     }
 
     console.log("loading", isLoading)
-
     return (
         <div>
-            <Breadcrumb />
             <Card>
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <Avatar size={100} src={data?.userImg} />

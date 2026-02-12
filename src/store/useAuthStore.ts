@@ -6,8 +6,10 @@ interface AuthState {
   email: string | null;
   name: string | null;
   image: string | null;
+  idUser: string | null;
+  role: string | null;
   isAuthenticated: boolean;
-  login: (email: string, name: string, image: string) => void;
+  login: (email: string, name: string, image: string, idUser: string, role: string) => void;
   reset: () => void;
   isValidateToken: () => Promise<void>;
 }
@@ -18,12 +20,16 @@ export const useAuthStore = create<AuthState>()(
       email: null,
       name: null,
       image: null,
+      idUser: null,
+      role: null,
       isAuthenticated: false,
-      login: (email, name, image) => {
+      login: (email, name, image, idUser, role) => {
         set({
           email,
           name,
           image,
+          idUser,
+          role,
           isAuthenticated: true,
         });
       },
@@ -32,6 +38,8 @@ export const useAuthStore = create<AuthState>()(
           email: null,
           name: null,
           image: null,
+          idUser: null,
+          role: null,
           isAuthenticated: false,
         }),
       isValidateToken: async () => {

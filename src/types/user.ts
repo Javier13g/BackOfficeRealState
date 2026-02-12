@@ -21,4 +21,5 @@ export interface User {
   statusId: string | null;
   statusUser: StatusUser | null;
   userImg?: string | null;
+  cardId?: string | null;
 }

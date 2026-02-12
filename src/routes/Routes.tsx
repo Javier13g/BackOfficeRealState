@@ -6,7 +6,7 @@ import { Spin } from "antd";
 import RecoveryPage from "../pages/Recovery/Recovery";
 import Register from "../pages/register/Register";
 import EditUser from "../pages/user/edit/EditUser";
-
+import Profile from "../pages/Profile/Profile";
 const UserPage = React.lazy(() => import("../pages/user/UserPage"));
 const UserDetail = React.lazy(() => import("../pages/user/detail/DetailUser"));
 const Login = React.lazy(() => import("../pages/Login/Login"));
@@ -23,7 +23,7 @@ const AppRoutes: React.FC = () => {
                     height: "100vh",
                 }}
             >
-                <Spin size="large" tip="Cargando..." />
+                <Spin size="large"/>
             </div>
         }>
             <Routes>
@@ -34,7 +34,7 @@ const AppRoutes: React.FC = () => {
 
                 {/* Rutas protegidas */}
                 <Route
-                    path="/home"
+                    path="home"
                     element={
                         <PrivateRoute>
                             <HomePage />
@@ -65,6 +65,14 @@ const AppRoutes: React.FC = () => {
                             </PrivateRoute>
                         }
                     />
+                        <Route
+                            path="profile"
+                            element={
+                                <PrivateRoute>
+                                    <Profile />
+                                </PrivateRoute>
+                            }
+                        />
                 </Route>
             </Routes>
         </Suspense>

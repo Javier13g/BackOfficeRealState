@@ -7,6 +7,7 @@ import { useAuthStore } from "../../store/useAuthStore";
 import NotificationMessage from "../../components/NotificationMessage";
 import { useState } from "react";
 import LoginService from "../../services/login/AuthService";
+import type { LoginResponse } from "../../types/login";
 
 interface LoginData {
     email: string;
@@ -20,10 +21,11 @@ const Login = () => {
     const onFinish = (values: LoginData) => {
         setLoading(true);
         LoginService.login(values.email, values.password)
-            .then((response) => {
+            .then((response: LoginResponse) => {
+                console.log("Login successful", response);
 
                 // Guarda el token en Zustand
-               login(response.email, response.name, response.image);
+               login(response.email, response.name, response.image, response.id, response.role);
 
                 // Muestra una notificación de éxito
                 NotificationMessage({

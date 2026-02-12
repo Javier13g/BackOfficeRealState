@@ -109,7 +109,7 @@ const RecoveryPage = () => {
                     <Typography.Title level={3} style={{ textAlign: "center" }}>
                         Recuperar Contraseña
                     </Typography.Title>
-                    <Steps current={currentStep} style={{ marginBottom: "24px" }}>
+                    <Steps current={currentStep} style={{ marginBottom: "24px" }} labelPlacement="vertical">
                         <Step title="Correo Electrónico" />
                         <Step title="Código OTP" />
                         <Step title="Nueva Contraseña" />

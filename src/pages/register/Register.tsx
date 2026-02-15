@@ -12,14 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LoginService from "../../services/login/AuthService";
 import NotificationMessage from "../../components/NotificationMessage";
-import type { register } from "../../types/register";
+import type { Register } from "../../types/register";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   console.log("Loading state:", loading);
   const navigate = useNavigate();
 
-  const onFinish = (values: register) => {
+  const onFinish = (values: Register) => {
     setLoading(true);
     LoginService.registerUser(
       values.email,
@@ -68,7 +68,7 @@ const Register = () => {
           }}
         >
           <Typography.Title level={3} style={{ textAlign: "center" }}>
-            Eres nuevo aquí? Regístrate
+            ¿Eres nuevo aquí? Regístrate
           </Typography.Title>
 
           <div>
@@ -186,7 +186,7 @@ const Register = () => {
                   type="primary"
                   block
                   htmlType="submit"
-                  //loading={loading}
+                //loading={loading}
                 >
                   Registrarse
                 </Button>

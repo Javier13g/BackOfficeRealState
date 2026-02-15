@@ -1,4 +1,4 @@
-export interface register {
+export interface Register {
   email: string;
   name: string;
   lastName: string;

@@ -7,6 +7,7 @@ import {
     Avatar,
     Col,
     Row,
+    Spin,
 } from "antd";
 import {
     UserOutlined,
@@ -18,23 +19,25 @@ import {
     UploadOutlined,
 } from "@ant-design/icons";
 import Dragger from "antd/es/upload/Dragger";
-import useSWR from "swr";
-import type { User } from "../../types/user";
+import useSWR, { mutate } from "swr";
+import type { PutProfileUser, User } from "../../types/user";
 import { useAuthStore } from "../../store/useAuthStore";
 import UserService from "../../services/users/UserService";
 import ResultComponent from "../../components/Result";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import NotificationMessage from "../../components/NotificationMessage";
 
 const { Title } = Typography;
 
 const Profile = () => {
     const idUser = useAuthStore((state) => state.idUser);
+    const login = useAuthStore((state) => state.login);
+    const authRole = useAuthStore((state) => state.role);
     const { data, error, isLoading } = useSWR<User>(
         idUser ? ["user", idUser] : null,
         () => UserService.getUserById(idUser ?? ""),
     );
-
-    console.log(isLoading)
+    const [loadingButton, setLoadingButton] = useState(false);
 
     const [form] = Form.useForm();
 
@@ -48,14 +51,89 @@ const Profile = () => {
                 address: data.address ?? "",
                 phoneNumber: data.phoneNumber ?? "",
                 password: "",
-                userImg: data.userImg ?? "",
+                userImg: data.userImg ? [{
+                    uid: '-1',
+                    name: 'avatar.png',
+                    status: 'done',
+                    url: data.userImg,
+                }] : [],
             });
         }
     }, [data, form]);
 
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '300px' }}>
+                <Spin size="large" tip="Cargando perfil..." />
+            </div>
+        );
+    }
+
     if (error) {
         return <ResultComponent {...error} />;
     }
+
+    const onFinish = (values: PutProfileUser) => {
+        if (!idUser) {
+            NotificationMessage({
+                type: "error",
+                message: "Error",
+                description: "No se encontró el usuario autenticado",
+            });
+            return;
+        }
+         setLoadingButton(true);
+        const formData = new FormData();
+        const textFields: (keyof PutProfileUser)[] = ["name", "lastName", "email", "cardId", "address", "phoneNumber"];
+
+        textFields.forEach((field) => {
+            const value = values[field];
+            if (value && typeof value === 'string') { // Type Guard simple
+                formData.append(field, value);
+            }
+        });
+
+        if (values.password) formData.append("password", values.password);
+
+        const file = values.userImg?.[0]?.originFileObj;
+        if (file) formData.append("userImg", file);
+
+        UserService.updateUser(idUser, formData)
+            .then((response: User) => {
+                const roleValue =
+                    typeof response?.role === "string"
+                        ? response.role
+                        : response?.role?.name ?? authRole ?? "";
+
+                const fullName = `${response?.name ?? values.name ?? ""} ${response?.lastName ?? values.lastName ?? ""}`.trim();
+
+                login(
+                    response?.email ?? values.email ?? "",
+                    fullName,
+                    response?.userImg ?? "",
+                    response?.id ?? idUser,
+                    roleValue
+                );
+
+                NotificationMessage({
+                    type: "success",
+                    message: "Operación Exitosa",
+                    description: "Perfil actualizado correctamente",
+                });
+
+                mutate(["user", idUser]);
+            })
+            .catch((error) => {
+                NotificationMessage({
+                    type: "error",
+                    message: "Error",
+                    description: error?.message || "Error al actualizar el perfil",
+                });
+            })
+            .finally(() => {
+                setLoadingButton(false);
+            });
+    };
 
     // const handleFinish = (values: User) => {
     //     // Aquí iría la lógica para actualizar el perfil
@@ -104,10 +182,7 @@ const Profile = () => {
                         <Form
                             form={form}
                             layout="vertical"
-                            onFinish={(values) => {
-                                console.log("Form values:", values);
-                                // Aquí iría la lógica para actualizar el perfil
-                            }}
+                            onFinish={onFinish}
                             style={{ width: "100%" }}
                             initialValues={{
                                 name: data?.name ?? "",
@@ -117,7 +192,7 @@ const Profile = () => {
                                 address: data?.address ?? "",
                                 phoneNumber: data?.phoneNumber ?? "",
                                 password: "",
-                                userImg: data?.userImg ?? "",
+                                userImg: [],
                             }}
                         >
                             <Row gutter={[32, 32]}>
@@ -219,12 +294,6 @@ const Profile = () => {
                                     <Form.Item
                                         label="Contraseña"
                                         name="password"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: "Por favor ingresa tu contraseña",
-                                            },
-                                        ]}
                                         style={{ marginBottom: 32 }}
                                     >
                                         <Input.Password
@@ -239,12 +308,16 @@ const Profile = () => {
                                     <Form.Item
                                         label="Imagen de perfil"
                                         name="userImg"
-                                        valuePropName="image"
+                                        valuePropName="fileList"
+                                        getValueFromEvent={(e) => {
+                                            if (Array.isArray(e)) return e;
+                                            return e?.fileList;
+                                        }}
                                         style={{ marginBottom: 32 }}
                                     >
                                         <Dragger
                                             name="file"
-                                            action="/upload.do"
+                                            beforeUpload={() => false}
                                             listType="picture"
                                             maxCount={1}
                                         >
@@ -264,7 +337,12 @@ const Profile = () => {
                             <Row>
                                 <Col span={24}>
                                     <Form.Item style={{ marginBottom: 0 }}>
-                                        <Button type="primary" htmlType="submit" block>
+                                        <Button
+                                            type="primary"
+                                            htmlType="submit"
+                                            block
+                                            loading={loadingButton}
+                                            disabled={loadingButton}>
                                             Guardar Cambios
                                         </Button>
                                     </Form.Item>

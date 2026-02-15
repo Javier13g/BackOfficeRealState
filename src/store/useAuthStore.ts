@@ -47,10 +47,10 @@ export const useAuthStore = create<AuthState>()(
           const isValid = await LoginService.isValidateToken();
           set({ isAuthenticated: isValid });
           if (!isValid) {
-            set({ email: null, name: null, image: null });
+            set({ email: null, name: null, image: null, idUser: null, role: null });
           }
         } catch {
-          set({ isAuthenticated: false, email: null, name: null, image: null });
+          set({ isAuthenticated: false, email: null, name: null, image: null, idUser: null, role: null });
         }
       },
     }),

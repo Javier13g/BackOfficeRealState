@@ -31,7 +31,6 @@ const UserPage = () => {
         "Activo": "green",
         "Inactivo": "red",
         "Suspendido": "orange",
-        // Puedes agregar más estados aquí en el futuro
     };
 
 
@@ -51,7 +50,7 @@ const UserPage = () => {
             dataIndex: 'role',
             key: 'role',
             render: (role: string) => (
-                <Tag color={role?.toLowerCase() === "administrador" ? "blue" : role?.toLowerCase() === "user" ? "green" : "default"}>
+                <Tag color={role?.toLowerCase() === "administrador" ? "blue" : role?.toLowerCase() === "usuario" ? "green" : "default"}>
                     {role}
                 </Tag>
             ),
@@ -78,10 +77,10 @@ const UserPage = () => {
                 const user = record as { key: string };
                 return (
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <EyeFilled width={16} height={16} onClick={() => {
+                        <EyeFilled style={{ fontSize: 16, cursor: "pointer"}} onClick={() => {
                             navigate("/home/usuarios/detalleusuario/" + user.key);
                         }} />
-                        <EditFilled width={16} height={16} onClick={() => {
+                        <EditFilled style={{ fontSize: 16, cursor: "pointer"}} onClick={() => {
                             navigate("/home/usuarios/editarusuario/" + user.key);
                         }} />
                     </div>

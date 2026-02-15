@@ -23,3 +23,21 @@ export interface User {
   userImg?: string | null;
   cardId?: string | null;
 }
+
+export interface PutProfileUser {
+  email: string;
+  name: string;
+  lastName: string;
+  image?: string | null;
+  userImg?: Array<{
+    uid?: string;
+    name?: string;
+    status?: string;
+    url?: string;
+    originFileObj?: File;
+  }>;
+  cardId?: string | null;
+  address?: string | null;
+  phoneNumber?: string | null;
+  password?: string;
+}

@@ -1,4 +1,4 @@
-import { Avatar, Card, Col, Row, Typography } from "antd";
+import { Avatar, Card, Col, Row, Spin, Tag, Typography } from "antd";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import UserService from "../../../services/users/UserService";
@@ -11,7 +11,20 @@ const DetailUser = () => {
         userId ? ["user", userId] : null,
         () => UserService.getUserById(userId ?? "")
     );
-    console.log(isLoading);
+
+    const statusColorMap: Record<string, string> = {
+        "Activo": "green",
+        "Inactivo": "red",
+        "Suspendido": "orange",
+    };
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '300px' }}>
+                <Spin size="large" tip="Cargando perfil..." />
+            </div>
+        );
+    }
 
     if (error) {
         return <ResultComponent {...error} />;
@@ -47,7 +60,9 @@ const DetailUser = () => {
                     </Col>
                     <Col span={12}>
                         <Typography.Title level={5}>Estado</Typography.Title>
-                        <Typography.Paragraph>{data?.statusUser?.statusName}</Typography.Paragraph>
+                        <Tag style={{ fontSize: 14}} color={statusColorMap[data?.statusUser?.statusName || ""]}>
+                            {data?.statusUser?.statusName || "N/A"}
+                        </Tag>
                     </Col>
                 </Row>
             </Card>

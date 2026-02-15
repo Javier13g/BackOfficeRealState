@@ -180,10 +180,7 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Dashboard", "1", <PieChartOutlined />),
-  getItem("Propiedades", "2", <HomeOutlined />, [
-    getItem("Listado", "2-1"),
-    getItem("Agregar Nueva", "2-2"),
-  ]),
+  getItem("Propiedades", "2", <HomeOutlined />),
   getItem("Agentes", "3", <UserOutlined />),
   getItem("Clientes", "4", <TeamOutlined />),
   getItem("Finanzas", "5", <DollarOutlined />),
@@ -250,7 +247,7 @@ const HomePage: React.FC = () => {
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     if (e.key === "1") {
       navigate("/home");
-    } else if (e.key === "4") {
+    } else if (e.key === "3") {
       navigate("/home/usuarios");
     }
   };
@@ -304,7 +301,7 @@ const HomePage: React.FC = () => {
           mode="inline"
           items={items}
           onClick={handleMenuClick}
-          selectedKeys={[location.pathname.includes("/usuarios") ? "4" : "1"]}
+          selectedKeys={[location.pathname.includes("/usuarios") ? "3" : "1"]}
         />
       </Sider>
       <Layout>

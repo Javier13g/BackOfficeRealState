@@ -3,80 +3,80 @@ import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import { Spin } from "antd";
-import RecoveryPage from "../pages/Recovery/Recovery";
-import Register from "../pages/register/Register";
-import EditUser from "../pages/user/edit/EditUser";
-import Profile from "../pages/Profile/Profile";
+const Login = React.lazy(() => import("../pages/Login/Login"));
+const Register = React.lazy(() => import("../pages/register/Register"));
+const RecoveryPage = React.lazy(() => import("../pages/recovery/Recovery"));
+const HomePage = React.lazy(() => import("../pages/home/HomePage"));
 const UserPage = React.lazy(() => import("../pages/user/UserPage"));
 const UserDetail = React.lazy(() => import("../pages/user/detail/DetailUser"));
-const Login = React.lazy(() => import("../pages/Login/Login"));
-const HomePage = React.lazy(() => import("../pages/home/HomePage"));
+const EditUser = React.lazy(() => import("../pages/user/edit/EditUser"));
+const Profile = React.lazy(() => import("../pages/profile/Profile"));
 
 const AppRoutes: React.FC = () => {
-    return (
-        <Suspense fallback={
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100vh",
-                }}
-            >
-                <Spin size="large"/>
-            </div>
-        }>
-            <Routes>
-                {/* Ruta pública */}
-                <Route path="/" element={<Login />} />
-                <Route path="/recovery" element={<RecoveryPage />} />
-                <Route path="/register" element={<Register />} />
+  return (
+    <Suspense fallback={
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Spin size="large" />
+      </div>
+    }>
+      <Routes>
+        {/* Ruta pública */}
+        <Route path="/" element={<Login />} />
+        <Route path="/recovery" element={<RecoveryPage />} />
+        <Route path="/register" element={<Register />} />
 
-                {/* Rutas protegidas */}
-                <Route
-                    path="home"
-                    element={
-                        <PrivateRoute>
-                            <HomePage />
-                        </PrivateRoute>
-                    }
-                >
-                    <Route
-                        path="usuarios"
-                        element={
-                            <PrivateRoute>
-                                <UserPage />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="usuarios/detalleusuario/:userId"
-                        element={
-                            <PrivateRoute>
-                                <UserDetail />
-                            </PrivateRoute>
-                        }
-                    />
-                    <Route
-                        path="usuarios/editarusuario/:userId"
-                        element={
-                            <PrivateRoute>
-                                <EditUser />
-                            </PrivateRoute>
-                        }
-                    />
-                        <Route
-                            path="profile"
-                            element={
-                                <PrivateRoute>
-                                    <Profile />
-                                </PrivateRoute>
-                            }
-                        />
-                </Route>
-            </Routes>
-        </Suspense>
-    );
+        {/* Rutas protegidas */}
+        <Route
+          path="home"
+          element={
+            <PrivateRoute>
+              <HomePage />
+            </PrivateRoute>
+          }
+        >
+          <Route
+            path="usuarios"
+            element={
+              <PrivateRoute>
+                <UserPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="usuarios/detalleusuario/:userId"
+            element={
+              <PrivateRoute>
+                <UserDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="usuarios/editarusuario/:userId"
+            element={
+              <PrivateRoute>
+                <EditUser />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+        </Route>
+      </Routes>
+    </Suspense>
+  );
 };
 
 export default AppRoutes;

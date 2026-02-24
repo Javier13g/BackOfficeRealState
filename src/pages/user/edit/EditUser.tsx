@@ -1,20 +1,40 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import UserService from "../../../services/users/UserService";
-import type { User } from "../../../types/user";
+import type { PutUser, Role, User } from "../../../types/user";
 import { Avatar, Button, Card, Col, Form, Input, Row, Select, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ResultComponent from "../../../components/Result";
 import Title from "antd/es/typography/Title";
-import { HomeOutlined, IdcardOutlined, LockOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined, IdcardOutlined, MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import NotificationMessage from "../../../components/NotificationMessage";
+import RoleService from "../../../services/roles/RoleService";
 
 const EditUser = () => {
+  const fetcher = () => RoleService.getRoles();
   const { userId } = useParams();
   const [loadingButton, setLoadingButton] = useState(false);
   const { data, error, isLoading } = useSWR<User>(
     userId ? ["user", userId] : null,
     () => UserService.getUserById(userId ?? ""),
   );
+  const { data: dataRoles, error: errorRoles, isLoading: isLoadingRole } = useSWR<Role[]>(["roles"], fetcher);
+  console.log("Roles obtenidos:", dataRoles);
+
+  useEffect(() => {
+    if (errorRoles) {
+      NotificationMessage({
+        type: "error",
+        message: "Error al cargar roles",
+        description: errorRoles.message || "No se pudieron obtener los roles disponibles",
+      });
+    }
+  }, [errorRoles]);
+
+  const dataSelectRoles = dataRoles?.map((role: Role) => ({
+    label: role.name,
+    value: role.name,
+  })) || [];
 
   const [form] = Form.useForm();
 
@@ -26,12 +46,54 @@ const EditUser = () => {
         email: data.email,
         phoneNumber: data.phoneNumber,
         address: data.address,
-        role: data.role?.name,
+        roleId: data.role?.name,
         status: data.statusUser?.statusName,
         cardId: data.cardId,
       });
     }
   }, [data, form]);
+
+  const onFinish = (values: PutUser) => {
+    if (!userId) {
+      NotificationMessage({
+        type: "error",
+        message: "Error",
+        description: "No se encontró el usuario autenticado",
+      });
+      return;
+    }
+    setLoadingButton(true);
+    const formData = new FormData();
+    const textFields: (keyof PutUser)[] = ["name", "lastName", "email", "cardId", "address", "phoneNumber", "roleId"];
+
+    textFields.forEach((field) => {
+      const value = values[field];
+      if (value && typeof value === 'string') { // Type Guard simple
+        formData.append(field, value);
+      }
+    });
+    UserService.updateUser(userId, formData)
+      .then(() => {
+
+        NotificationMessage({
+          type: "success",
+          message: "Operación Exitosa",
+          description: "Perfil actualizado correctamente",
+        });
+
+        mutate(["user", userId]);
+      })
+      .catch((error) => {
+        NotificationMessage({
+          type: "error",
+          message: "Error",
+          description: error?.message || "Error al actualizar el perfil",
+        });
+      })
+      .finally(() => {
+        setLoadingButton(false);
+      });
+  };
 
   if (error) {
     return <ResultComponent {...error} />;
@@ -86,10 +148,7 @@ const EditUser = () => {
             <Form
               form={form}
               layout="vertical"
-              onFinish={(values) => {
-                console.log("Form values:", values);
-                // Aquí puedes agregar la lógica para enviar los datos al backend
-              }}
+              onFinish={onFinish}
               style={{ width: "100%" }}
               initialValues={{
                 name: data?.name ?? "",
@@ -200,13 +259,16 @@ const EditUser = () => {
                 <Col span={8}>
                   <Form.Item
                     label="Rol"
-                    name="role" // Asegúrate de que tu interfaz PutProfileUser tenga este campo 'role'
+                    name="roleId" // Asegúrate de que tu interfaz PutProfileUser tenga este campo 'role'
                     rules={[{ required: true, message: "Por favor selecciona un rol" }]}
                     style={{ marginBottom: 32 }}
                   >
-                    <Select placeholder="Selecciona un rol">
-                      <Select.Option value="Administrador">Administrador</Select.Option>
-                      <Select.Option value="Vendedor">Vendedor</Select.Option>
+                    <Select placeholder="Selecciona un rol" loading={isLoadingRole} disabled={isLoadingRole}>
+                      {dataSelectRoles.map((role) => (
+                        <Select.Option key={role.value} value={role.value}>
+                          {role.label}
+                        </Select.Option>
+                      ))}
                     </Select>
                   </Form.Item>
                 </Col>

@@ -41,3 +41,7 @@ export interface PutProfileUser {
   phoneNumber?: string | null;
   password?: string;
 }
+
+export interface PutUser extends PutProfileUser {
+  roleId: string;
+}

@@ -18,7 +18,12 @@ export const UserService = {
         'Content-Type': 'multipart/form-data',
       },
     });
-  }
+  },
+  changeStatusUser: async (id: string, statusId: string) => {
+    return await request(`users/${id}/status`, "PUT", { statusId }, {
+      withCredentials: true,
+    });
+  },
 };
 
 export default UserService;

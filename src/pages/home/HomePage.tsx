@@ -201,6 +201,8 @@ const HomePage: React.FC = () => {
   // Obtener datos del usuario desde el store
   const name = useAuthStore((state) => state.name);
   const image = useAuthStore((state) => state.image);
+  const role = useAuthStore((state) => state.role)
+  console.log(role)
 
   const userMenuItems: MenuProps["items"] = [
     {
@@ -238,10 +240,10 @@ const HomePage: React.FC = () => {
   // Lógica para iniciales del usuario
   const userInitials = name
     ? name
-        .split(" ")
-        .map((word: string) => word.charAt(0).toUpperCase())
-        .join("")
-        .substring(0, 2)
+      .split(" ")
+      .map((word: string) => word.charAt(0).toUpperCase())
+      .join("")
+      .substring(0, 2)
     : "U";
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
@@ -330,7 +332,10 @@ const HomePage: React.FC = () => {
                   {/* Mostrar iniciales si no hay imagen */}
                   {!image && userInitials}
                 </Avatar>
-                <span style={{ fontWeight: 500 }}>{name || "Usuario"}</span>
+                 <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
+                  <span style={{ fontWeight: 500 }}>{name || "Usuario"}</span>
+                  <span style={{ fontWeight: 400, fontSize: '12px', color: '#888' }}>{role || "Rol no definido"}</span>
+                </div>
               </Space>
             </Dropdown>
           </Space>

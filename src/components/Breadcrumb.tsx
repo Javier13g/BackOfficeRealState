@@ -14,7 +14,7 @@ const Breadcrumb = () => {
         };
     });
 
-    return <AntBreadcrumb items={items} style={{ marginBottom: '16px' }} />;
+    return <AntBreadcrumb items={items} />;
 };
 
 export default Breadcrumb;
